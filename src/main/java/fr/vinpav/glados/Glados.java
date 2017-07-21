@@ -26,11 +26,7 @@ public class Glados {
         try {
             myGlados.start();
             System.out.println("Glados is started.");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Fatal error. Program terminated");
-            System.exit(1);
-        } catch (NoPlayerException e) {
+        } catch (IOException | NoPlayerException e) {
             e.printStackTrace();
             System.out.println("Fatal error. Program terminated");
             System.exit(1);
