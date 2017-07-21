@@ -1,2 +1,2 @@
 # glados
-# Homemade personnal assistant
+# Homemade personal assistant
