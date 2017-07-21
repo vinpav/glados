@@ -9,3 +9,8 @@
 *.zip
 *.tar.gz
 *.rar
+
+# IDE files
+*.idea
+*.eclipse
+*.iml
