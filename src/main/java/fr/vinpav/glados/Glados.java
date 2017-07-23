@@ -1,49 +1,49 @@
 package fr.vinpav.glados;
 
-import javax.media.Manager;
-import javax.media.NoPlayerException;
-import javax.media.Player;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import fr.vinpav.glados.config.Configuration;
+import fr.vinpav.glados.exception.GladosException;
+import fr.vinpav.glados.plugin.PluginManager;
+
+import java.util.Iterator;
 
 public class Glados {
 
-    private URL streamUrl;
+    private Configuration mainConfig;
 
-    public Glados(String aStreamUrl) {
-        this.assignURL(aStreamUrl);
+    public Glados() {
+        mainConfig = new Configuration();
     }
 
-    public void start() throws IOException, NoPlayerException {
-        Player player = Manager.createPlayer(streamUrl);
-        player.start();
-    }
-
-    public static void main(String[] args) {
+    public void start() {
         System.out.println("Starting Glados...");
-        Glados myGlados = new Glados("http://mp3lg3.scdn.arkena.com/10489/europe1.mp3");
         try {
-            myGlados.start();
-            System.out.println("Glados is started.");
-        } catch (IOException | NoPlayerException e) {
+            mainConfig.load();
+            PluginManager.getInstance().initialize(mainConfig);
+        } catch (GladosException e) {
+            System.out.println("Fatal error during Glados initialisation. Terminating...");
             e.printStackTrace();
-            System.out.println("Fatal error. Program terminated");
             System.exit(1);
         }
     }
 
-    public void assignURL(String aStreamUrl) throws IllegalArgumentException {
-        System.out.println("Assigning URL : " + aStreamUrl);
-        if (aStreamUrl == null) {
-            throw new IllegalArgumentException("Glados cannot read null URL...");
+    public StringBuilder getRegisteredPlugins() {
+        StringBuilder result = new StringBuilder();
+        Iterator iterate = PluginManager.getInstance().getPluginList().iterator();
+
+        int i = 0;
+        while (iterate.hasNext()) {
+            result.append("[Glados] > " + i + " : " + iterate.next() + "\n");
+            i++;
         }
-        try {
-            this.streamUrl = new URL(aStreamUrl);
-            System.out.println("URL assigned.");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Glados cannot read the malformed URL " + aStreamUrl);
-        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Glados myGlados = new Glados();
+        myGlados.start();
+        System.out.println("[Glados] > Initialization sequence complete.");
+        System.out.println("[Glados] > Here's the registered plugins list :");
+        System.out.println(myGlados.getRegisteredPlugins());
     }
 }
