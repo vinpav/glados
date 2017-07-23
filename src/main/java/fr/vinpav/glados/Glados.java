@@ -26,6 +26,10 @@ public class Glados {
         }
     }
 
+    public void runPlugins() {
+        PluginManager.getInstance().executeAll();
+    }
+
     public StringBuilder getRegisteredPlugins() {
         StringBuilder result = new StringBuilder();
         Iterator iterate = PluginManager.getInstance().getPluginList().iterator();
@@ -45,5 +49,6 @@ public class Glados {
         System.out.println("[Glados] > Initialization sequence complete.");
         System.out.println("[Glados] > Here's the registered plugins list :");
         System.out.println(myGlados.getRegisteredPlugins());
+        myGlados.runPlugins();
     }
 }

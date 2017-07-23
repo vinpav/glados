@@ -33,6 +33,17 @@ public class PluginManager {
         }
     }
 
+    public void executeAll() {
+        Collection<Plugin> pluginCollection = plugins.values();
+
+        Iterator<Plugin> it = pluginCollection.iterator();
+
+        while (it.hasNext()) {
+            Plugin current = it.next();
+            current.run();
+        }
+    }
+
     private void register(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         System.out.println("Registering plugin : " + pluginName + "...");
         Configuration pluginConfig = new Configuration(pluginName + ".config");
@@ -42,10 +53,10 @@ public class PluginManager {
             Plugin pluginInstance = (Plugin) pluginClass.newInstance();
             pluginInstance.setConfiguration(pluginConfig);
             plugins.put(pluginName, pluginInstance);
+            System.out.println(pluginInstance.describe() + " is online.");
         } catch (GladosException e) {
             System.out.println("Warning, plugin " + pluginName + " not loaded : " + e.getMessage());
         }
-        System.out.println("Complete.");
     }
 
     public Set getPluginList() {

@@ -20,8 +20,4 @@ public abstract class Plugin implements Runnable {
     public void setConfiguration(Configuration config) {
         this.config = config;
     }
-
-    public void initialize(String configFileName) {
-
-    }
 }
