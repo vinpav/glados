@@ -23,7 +23,7 @@ public class PluginManager {
         this.config = config;
         plugins = new HashMap();
 
-        for (String pluginName : config.getPluginNames()) {
+        for (String pluginName : getPluginNames()) {
             try {
                 register(pluginName);
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -62,4 +62,18 @@ public class PluginManager {
     public Set getPluginList() {
         return plugins.keySet();
     }
+
+    private List<String> getPluginNames() throws GladosException {
+        List<String> pluginNames = null;
+
+        String names = config.getProperty("glados.plugin.names");
+        if (names != null) {
+            pluginNames = Arrays.asList(names.split("\\s*,\\s*"));
+        } else {
+            throw new GladosException("Glados initialisation exception : no plugins found.");
+        }
+
+        return pluginNames;
+    }
+
 }

@@ -49,16 +49,4 @@ public class Configuration {
         return properties.getProperty(aPropertyName);
     }
 
-    public List<String> getPluginNames() throws GladosException {
-        List<String> pluginNames = null;
-
-        String names = properties.getProperty("glados.plugin.names");
-        if (names != null) {
-            pluginNames = Arrays.asList(names.split("\\s*,\\s*"));
-        } else {
-            throw new GladosException("Glados initialisation exception : no plugins found.");
-        }
-
-        return pluginNames;
-    }
 }
