@@ -1,17 +1,24 @@
 package fr.vinpav.glados.plugin;
 
 import fr.vinpav.glados.config.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class Plugin implements Runnable {
+public abstract class Plugin extends Thread {
+    protected static final Logger logger = LoggerFactory.getLogger(Plugin.class);
+
     private Configuration config;
 
     public String describe() {
         return config.getProperty("plugin.description");
     }
 
-    public abstract void start();
+    public void play() {
+        logger.info("Starting " + describe());
+        start();
+    }
 
-    public abstract void stop();
+    public abstract void shutdown();
 
     public Configuration getConfiguration() {
         return config;
@@ -20,4 +27,5 @@ public abstract class Plugin implements Runnable {
     public void setConfiguration(Configuration config) {
         this.config = config;
     }
+
 }

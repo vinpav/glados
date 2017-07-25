@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 
-/* This clock displays the local time every minute */
+/* This clock displays the local time every 'plugin.clock.tick' */
 public class ClockPlugin extends Plugin {
     protected static final Logger logger = LoggerFactory.getLogger(ClockPlugin.class);
 
@@ -15,14 +15,15 @@ public class ClockPlugin extends Plugin {
     }
 
     @Override
-    public void start() {
+    public void play() {
         tick = Integer.parseInt(getConfiguration().getProperty("plugin.clock.tick"));
-        new Thread(this).start();
+        super.play();
     }
 
     @Override
-    public void stop() {
-
+    public void shutdown() {
+        logger.info(describe() + " is shutting down.");
+        interrupt();
     }
 
     @Override
@@ -35,7 +36,8 @@ public class ClockPlugin extends Plugin {
             try {
                 Thread.sleep(tick);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                break;
             }
         }
 

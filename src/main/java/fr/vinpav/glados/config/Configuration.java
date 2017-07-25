@@ -36,14 +36,14 @@ public class Configuration {
                 throw new GladosException("Error while loading Glados configuration file : " + configFileName);
             }
         } catch (IOException e) {
-            logger.info("Error while loading Glados configuration : " + e);
+            logger.error("Error while loading Glados configuration : " + e);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    logger.info("Error while closing Glados configuration stream : " + e);
+                    logger.error("Error while closing Glados configuration stream : " + e);
                 }
             }
         }

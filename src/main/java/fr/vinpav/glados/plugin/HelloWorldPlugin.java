@@ -12,13 +12,9 @@ public class HelloWorldPlugin extends Plugin {
 
     }
     @Override
-    public void start() {
-        new Thread(this).start();
-    }
-
-    @Override
-    public void stop() {
-
+    public void shutdown() {
+        logger.info(describe() + " is shutting down.");
+        interrupt();
     }
 
     @Override
@@ -31,7 +27,8 @@ public class HelloWorldPlugin extends Plugin {
             try {
                 Thread.sleep(7000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                break;
             }
         }
 

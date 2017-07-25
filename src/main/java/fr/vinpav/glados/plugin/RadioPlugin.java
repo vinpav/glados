@@ -13,17 +13,16 @@ import java.net.URLConnection;
 public class RadioPlugin extends Plugin {
     protected static final Logger logger = LoggerFactory.getLogger(RadioPlugin.class);
 
+    Player player;
+
     public RadioPlugin() {
     }
 
     @Override
-    public void start() {
-        new Thread(this).start();
-    }
-
-    @Override
-    public void stop() {
-
+    public void shutdown() {
+        logger.info(describe() + " is shutting down.");
+        player.close();
+        interrupt();
     }
 
     @Override
@@ -43,7 +42,7 @@ public class RadioPlugin extends Plugin {
         URLConnection urlConnection = new URL(spec).openConnection();
         urlConnection.connect();
 
-        Player player = new Player (urlConnection.getInputStream());
+        player = new Player (urlConnection.getInputStream());
         player.play();
     }
 }
