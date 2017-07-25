@@ -5,18 +5,14 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 
-/* This clock displays the local time every minute */
-public class ClockPlugin extends Plugin {
-    protected static final Logger logger = LoggerFactory.getLogger(ClockPlugin.class);
+public class HelloWorldPlugin extends Plugin {
+    protected static final Logger logger = LoggerFactory.getLogger(HelloWorldPlugin.class);
 
-    int tick;
+    public HelloWorldPlugin() {
 
-    public ClockPlugin() {
     }
-
     @Override
     public void start() {
-        tick = Integer.parseInt(getConfiguration().getProperty("plugin.clock.tick"));
         new Thread(this).start();
     }
 
@@ -31,9 +27,9 @@ public class ClockPlugin extends Plugin {
 
         for(;;) {
             thisSec = LocalTime.now();
-            logger.info("Time is : " + thisSec);
+            logger.info("Hello world, it's : " + thisSec);
             try {
-                Thread.sleep(tick);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

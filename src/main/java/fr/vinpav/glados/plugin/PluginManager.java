@@ -2,10 +2,14 @@ package fr.vinpav.glados.plugin;
 
 import fr.vinpav.glados.config.Configuration;
 import fr.vinpav.glados.exception.GladosException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class PluginManager {
+    protected static final Logger logger = LoggerFactory.getLogger(PluginManager.class);
+
     private static PluginManager ourInstance = new PluginManager();
 
     private Configuration config;
@@ -27,7 +31,7 @@ public class PluginManager {
             try {
                 register(pluginName);
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                System.out.println("Warning : Unable to register plugin " + pluginName);
+                logger.info("Warning : Unable to register plugin " + pluginName);
                 e.printStackTrace();
             }
         }
@@ -40,12 +44,12 @@ public class PluginManager {
 
         while (it.hasNext()) {
             Plugin current = it.next();
-            current.run();
+            current.start();
         }
     }
 
     private void register(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        System.out.println("Registering plugin : " + pluginName + "...");
+        logger.info("Registering plugin : " + pluginName + "...");
         Configuration pluginConfig = new Configuration(pluginName + ".config");
         try {
             pluginConfig.load();
@@ -53,9 +57,9 @@ public class PluginManager {
             Plugin pluginInstance = (Plugin) pluginClass.newInstance();
             pluginInstance.setConfiguration(pluginConfig);
             plugins.put(pluginName, pluginInstance);
-            System.out.println(pluginInstance.describe() + " is online.");
+            logger.info(pluginInstance.describe() + " is online.");
         } catch (GladosException e) {
-            System.out.println("Warning, plugin " + pluginName + " not loaded : " + e.getMessage());
+            logger.info("Warning, plugin " + pluginName + " not loaded : " + e.getMessage());
         }
     }
 

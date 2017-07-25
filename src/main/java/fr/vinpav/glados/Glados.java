@@ -3,10 +3,13 @@ package fr.vinpav.glados;
 import fr.vinpav.glados.config.Configuration;
 import fr.vinpav.glados.exception.GladosException;
 import fr.vinpav.glados.plugin.PluginManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
 public class Glados {
+    protected static final Logger logger = LoggerFactory.getLogger(Glados.class);
 
     private Configuration mainConfig;
 
@@ -15,12 +18,12 @@ public class Glados {
     }
 
     public void start() {
-        System.out.println("Starting Glados...");
+        logger.info("Starting Glados...");
         try {
             mainConfig.load();
             PluginManager.getInstance().initialize(mainConfig);
         } catch (GladosException e) {
-            System.out.println("Fatal error during Glados initialisation. Terminating...");
+            logger.info("Fatal error during Glados initialisation. Terminating...");
             e.printStackTrace();
             System.exit(1);
         }
@@ -46,9 +49,8 @@ public class Glados {
     public static void main(String[] args) {
         Glados myGlados = new Glados();
         myGlados.start();
-        System.out.println("[Glados] > Initialization sequence complete.");
-        System.out.println("[Glados] > Here's the registered plugins list :");
-        System.out.println(myGlados.getRegisteredPlugins());
+        logger.info("[Glados] > Initialization sequence complete.");
+        logger.info("[Glados] > Here's the registered plugins list :\n" + myGlados.getRegisteredPlugins().toString());
         myGlados.runPlugins();
     }
 }

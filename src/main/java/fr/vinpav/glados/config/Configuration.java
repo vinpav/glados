@@ -1,6 +1,8 @@
 package fr.vinpav.glados.config;
 
 import fr.vinpav.glados.exception.GladosException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.Properties;
 
 public class Configuration {
+    protected static final Logger logger = LoggerFactory.getLogger(Configuration.class);
+    
     private Properties properties;
     private String configFileName;
 
@@ -32,14 +36,14 @@ public class Configuration {
                 throw new GladosException("Error while loading Glados configuration file : " + configFileName);
             }
         } catch (IOException e) {
-            System.out.println("Error while loading Glados configuration : " + e);
+            logger.info("Error while loading Glados configuration : " + e);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.println("Error while closing Glados configuration stream : " + e);
+                    logger.info("Error while closing Glados configuration stream : " + e);
                 }
             }
         }
