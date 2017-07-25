@@ -49,7 +49,7 @@ public class Glados {
         Glados myGlados = new Glados();
         myGlados.start();
         logger.info("[Glados] > Initialization sequence complete.");
-        logger.info("[Glados] > Type /help if you're lost.");
+        logger.info("[Glados] > Type 'help;' if you're lost.");
         logger.info("[Glados] > May I help you ?");
         myGlados.getInterpreter().listen();
     }

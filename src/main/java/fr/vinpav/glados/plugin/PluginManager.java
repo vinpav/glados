@@ -31,30 +31,38 @@ public class PluginManager {
     public void startAll() {
         try {
             for (String pluginName : getPluginNames()) {
-                try {
-                    register(pluginName);
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                    logger.warn("Unable to register plugin " + pluginName);
-                    e.printStackTrace();
-                }
+                startPlugin(pluginName);
             }
         } catch (GladosException e) {
             logger.error("Plugins startup failed " + e.getMessage());
         }
     }
 
+    public void startPlugin(String pluginName) {
+        try {
+            register(pluginName);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            logger.warn("Unable to register plugin " + pluginName);
+            e.printStackTrace();
+        }
+    }
+
     public void shutdownAll() {
         try {
             for (String pluginName : getPluginNames()) {
-                try {
-                    unregister(pluginName);
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                    logger.warn("Unable to unregister plugin " + pluginName);
-                    e.printStackTrace();
-                }
+                stopPlugin(pluginName);
             }
         } catch (GladosException e) {
             logger.error("Plugins shutdown failed " + e.getMessage());
+        }
+    }
+
+    public void stopPlugin(String pluginName) {
+        try {
+            unregister(pluginName);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            logger.warn("Unable to unregister plugin " + pluginName);
+            e.printStackTrace();
         }
     }
 
