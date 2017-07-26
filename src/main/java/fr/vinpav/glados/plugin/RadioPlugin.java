@@ -69,7 +69,7 @@ public class RadioPlugin extends Plugin {
                 System.out.println(getPlaylist());
                 break;
             }
-            case "play": {
+            case "startup": {
                 play(Integer.parseInt(command.get(1)));
                 break;
             }
@@ -82,11 +82,10 @@ public class RadioPlugin extends Plugin {
     private String getCommandList() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("[Glados] > Here's the " + describe() + " command list ?\n");
+        stringBuilder.append("[Glados] > Here's the " + describe() + " command list\n");
         stringBuilder.append("radio_plugin help;                  : this help.\n");
         stringBuilder.append("radio_plugin list;                  : the radio playlist.\n");
-        stringBuilder.append("radio_plugin play [channel number]; : play the specified entry from the playlist.\n");
-        stringBuilder.append("Type 'radio_plugin start/stop;' to turn the radio on/off.");
+        stringBuilder.append("radio_plugin startup [channel number]; : startup the specified entry from the playlist.\n");
 
         return stringBuilder.toString();
     }

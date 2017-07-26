@@ -16,9 +16,9 @@ public class ClockPlugin extends Plugin {
     }
 
     @Override
-    public void play() {
+    public void startup() {
         tick = Integer.parseInt(getConfiguration().getProperty("plugin.clock.tick"));
-        super.play();
+        super.startup();
     }
 
     @Override
@@ -41,11 +41,27 @@ public class ClockPlugin extends Plugin {
                 break;
             }
         }
-
     }
 
     @Override
     public void execute(List<String> command) {
+        switch (command.get(0)) {
+            case "help": {
+                System.out.println(getCommandList());
+                break;
+            }
+            default: {
+                System.out.println("[Glados] > I don't know what you're talking about.");
+            }
+        }
+    }
 
+    private String getCommandList() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("[Glados] > Here's the " + describe() + " command list\n");
+        stringBuilder.append("clock_plugin help;                  : this help.\n");
+
+        return stringBuilder.toString();
     }
 }

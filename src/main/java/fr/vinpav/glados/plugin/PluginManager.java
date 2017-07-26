@@ -74,7 +74,7 @@ public class PluginManager {
             Class pluginClass = Class.forName(pluginConfig.getProperty("plugin.class.name"));
             Plugin pluginInstance = (Plugin) pluginClass.newInstance();
             pluginInstance.setConfiguration(pluginConfig);
-            pluginInstance.play();
+            pluginInstance.startup();
             plugins.put(pluginName, pluginInstance);
             logger.info(pluginInstance.describe() + " is online.");
         } catch (GladosException e) {

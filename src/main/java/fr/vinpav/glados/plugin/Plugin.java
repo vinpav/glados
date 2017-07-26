@@ -14,7 +14,7 @@ public abstract class Plugin extends Thread implements CommandController {
         return config.getProperty("plugin.description");
     }
 
-    public void play() {
+    public void startup() {
         logger.info("Starting " + describe());
         start();
     }
