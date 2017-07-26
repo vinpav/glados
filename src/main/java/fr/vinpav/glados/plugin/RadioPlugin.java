@@ -45,7 +45,7 @@ public class RadioPlugin extends Plugin {
     }
 
     private void play(int playlistEntry) {
-        System.out.println("[Glados] > Switchin to " + getConfiguration().getProperty("playlist.entry.name." + playlistEntry));
+        logger.info("[Glados] > Switchin to " + getConfiguration().getProperty("playlist.entry.name." + playlistEntry));
         String url = getConfiguration().getProperty("playlist.entry.url." + playlistEntry);
         if (url != null) {
             try {
@@ -54,7 +54,7 @@ public class RadioPlugin extends Plugin {
                 logger.error("[Glados] > Looks like the radio is broken...", e);
             }
         } else {
-            System.out.println("[Glados] > Ah ah ah... There's no playlist entry at number " + playlistEntry);
+            logger.info("[Glados] > Ah ah ah... There's no playlist entry at number " + playlistEntry);
         }
     }
 
@@ -62,11 +62,11 @@ public class RadioPlugin extends Plugin {
     public void execute(List<String> command) {
         switch (command.get(0)) {
             case "help": {
-                System.out.println(getCommandList());
+                logger.info(getCommandList());
                 break;
             }
             case "list": {
-                System.out.println(getPlaylist());
+                logger.info(getPlaylist());
                 break;
             }
             case "startup": {
@@ -74,7 +74,7 @@ public class RadioPlugin extends Plugin {
                 break;
             }
             default: {
-                System.out.println("[Glados] > I don't know what you're talking about.");
+                logger.info("[Glados] > I don't know what you're talking about.");
             }
         }
     }

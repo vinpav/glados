@@ -47,11 +47,11 @@ public class ClockPlugin extends Plugin {
     public void execute(List<String> command) {
         switch (command.get(0)) {
             case "help": {
-                System.out.println(getCommandList());
+                logger.info(getCommandList());
                 break;
             }
             default: {
-                System.out.println("[Glados] > I don't know what you're talking about.");
+                logger.info("[Glados] > I don't know what you're talking about.");
             }
         }
     }
