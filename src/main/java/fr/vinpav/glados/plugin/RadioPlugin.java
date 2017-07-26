@@ -37,11 +37,15 @@ public class RadioPlugin extends Plugin {
         URLConnection urlConnection = new URL(spec).openConnection();
         urlConnection.connect();
 
+        if (player != null) {
+            player.close();
+        }
         player = new Player (urlConnection.getInputStream());
         player.play();
     }
 
     private void play(int playlistEntry) {
+        System.out.println("[Glados] > Switchin to " + getConfiguration().getProperty("playlist.entry.name." + playlistEntry));
         String url = getConfiguration().getProperty("playlist.entry.url." + playlistEntry);
         if (url != null) {
             try {
@@ -56,15 +60,7 @@ public class RadioPlugin extends Plugin {
 
     @Override
     public void execute(List<String> command) {
-        if (command.size() == 1) {
-            execute(command.get(0));
-        } else if (command.size() == 2) {
-            execute(command.get(0), command.get(1));
-        }
-    }
-
-    private void execute(String order) {
-        switch (order) {
+        switch (command.get(0)) {
             case "help": {
                 System.out.println(getCommandList());
                 break;
@@ -73,16 +69,8 @@ public class RadioPlugin extends Plugin {
                 System.out.println(getPlaylist());
                 break;
             }
-            default: {
-                System.out.println("[Glados] > I don't know what you're talking about.");
-            }
-        }
-    }
-
-    private void execute(String order, String object){
-        switch (order) {
             case "play": {
-                play(Integer.parseInt(object));
+                play(Integer.parseInt(command.get(1)));
                 break;
             }
             default: {
@@ -108,7 +96,10 @@ public class RadioPlugin extends Plugin {
         StringBuilder playlist = new StringBuilder();
 
         for (int i = 1; i<entryCount; i++) {
-            playlist.append(i + "/ " + getConfiguration().getProperty("playlist.entry.name." + i));
+            playlist.append(i);
+            playlist.append("/ ");
+            playlist.append(getConfiguration().getProperty("playlist.entry.name." + i));
+            playlist.append("\n");
         }
 
         return playlist.toString();

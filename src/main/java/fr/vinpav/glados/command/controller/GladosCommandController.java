@@ -36,6 +36,7 @@ public class GladosCommandController {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("[Glados] > You required the command list ? Well...\n");
+        stringBuilder.append("----------------------------------------------------\n");
         stringBuilder.append("available;             : list available plugins.\n");
         stringBuilder.append("exit;                  : Shutdown. (You shouldn't do that.)\n");
         stringBuilder.append("help;                  : I know you know this one...\n");
@@ -44,6 +45,8 @@ public class GladosCommandController {
         stringBuilder.append("startall;              : start all plugins.\n");
         stringBuilder.append("stop [plugin name];    : stop a plugin (ex : '/stop clock_plugin').\n");
         stringBuilder.append("stopall;               : stop all plugins.\n");
+        stringBuilder.append("----------------------------------------------------\n");
+        stringBuilder.append("Type '[plugin name] help;' to see a plugin specific commands.\n");
 
         return stringBuilder.toString();
     }
@@ -129,6 +132,5 @@ public class GladosCommandController {
         } catch (GladosException e) {
             logger.error("[Glados] > Shit happens.", e);
         }
-        System.out.println("[Glados] > I don't know what you're talking about.");
     }
 }
