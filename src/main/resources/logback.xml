@@ -10,7 +10,7 @@
     <!-- ============================== -->
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{"HH:mm:ss"} [%thread] %-5p %m%n</pattern>
+            <pattern>%d{"HH:mm:ss"} [%thread] %highlight(%-5p) %red(%m%n)</pattern>
         </encoder>
     </appender>
 
