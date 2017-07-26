@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
+import java.util.List;
 
 /* This clock displays the local time every 'plugin.clock.tick' */
 public class ClockPlugin extends Plugin {
@@ -40,6 +41,11 @@ public class ClockPlugin extends Plugin {
                 break;
             }
         }
+
+    }
+
+    @Override
+    public void execute(List<String> command) {
 
     }
 }

@@ -1,6 +1,6 @@
 package fr.vinpav.glados.command.interpreter;
 
-import fr.vinpav.glados.command.controller.CommandController;
+import fr.vinpav.glados.command.controller.GladosCommandController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,12 +12,12 @@ public class CommandLineInterpreter implements Interpreter {
     protected static final Logger logger = LoggerFactory.getLogger(CommandLineInterpreter.class);
 
     Scanner scanner;
-    CommandController controller;
+    GladosCommandController controller;
 
     public CommandLineInterpreter() {
         scanner = new Scanner(System.in);
         scanner.useDelimiter(";");
-        controller = new CommandController();
+        controller = new GladosCommandController();
     }
 
     public void listen() {

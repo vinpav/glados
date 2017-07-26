@@ -33,17 +33,17 @@ public class Configuration {
             if (inputStream != null) {
                 properties.load(inputStream);
             } else {
-                throw new GladosException("Error while loading Glados configuration file : " + configFileName);
+                throw new GladosException("Where did I put my configuration file " + configFileName + " ?");
             }
         } catch (IOException e) {
-            logger.error("Error while loading Glados configuration : " + e);
+            logger.error("[Glados] > I can't load my own configuration. I give up.", e);
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    logger.error("Error while closing Glados configuration stream : " + e);
+                    logger.error("[Glados] > Cannot close configuration stream.", e);
                 }
             }
         }

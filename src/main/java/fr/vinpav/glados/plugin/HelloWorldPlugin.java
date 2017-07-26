@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class HelloWorldPlugin extends Plugin {
     protected static final Logger logger = LoggerFactory.getLogger(HelloWorldPlugin.class);
@@ -32,5 +33,10 @@ public class HelloWorldPlugin extends Plugin {
             }
         }
 
+    }
+
+    @Override
+    public void execute(List<String> command) {
+        // This plugin has no commands
     }
 }

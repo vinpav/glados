@@ -13,7 +13,7 @@ public class PluginManager {
     private static PluginManager ourInstance = new PluginManager();
 
     private Configuration config;
-    public Map plugins;
+    public Map<String,Plugin> plugins;
 
     public static PluginManager getInstance() {
         return ourInstance;
@@ -34,7 +34,7 @@ public class PluginManager {
                 startPlugin(pluginName);
             }
         } catch (GladosException e) {
-            logger.error("Plugins startup failed " + e.getMessage());
+            logger.error("[Glados] > Plugins startup failed " + e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class PluginManager {
         try {
             register(pluginName);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.warn("Unable to register plugin " + pluginName);
+            logger.warn("[Glados] > Unable to register plugin " + pluginName);
             e.printStackTrace();
         }
     }
@@ -53,7 +53,7 @@ public class PluginManager {
                 stopPlugin(pluginName);
             }
         } catch (GladosException e) {
-            logger.error("Plugins shutdown failed " + e.getMessage());
+            logger.error("[Glados] > Plugins shutdown failed " + e.getMessage());
         }
     }
 
@@ -61,13 +61,13 @@ public class PluginManager {
         try {
             unregister(pluginName);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.warn("Unable to unregister plugin " + pluginName);
+            logger.warn("[Glados] > Unable to unregister plugin " + pluginName);
             e.printStackTrace();
         }
     }
 
     private void register(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.info("Registering plugin : " + pluginName + "...");
+        logger.info("[Glados] > Registering plugin : " + pluginName + "...");
         Configuration pluginConfig = new Configuration(pluginName + ".config");
         try {
             pluginConfig.load();
@@ -78,13 +78,13 @@ public class PluginManager {
             plugins.put(pluginName, pluginInstance);
             logger.info(pluginInstance.describe() + " is online.");
         } catch (GladosException e) {
-            logger.error("Warning, plugin " + pluginName + " not loaded : " + e.getMessage());
+            logger.warn("[Glados] > Warning, plugin " + pluginName + " not loaded : " + e.getMessage());
         }
     }
 
     private void unregister(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.info("Unregistering plugin : " + pluginName + "...");
-        Plugin plugin = (Plugin)plugins.get(pluginName);
+        logger.info("[Glados] > Unregistering plugin : " + pluginName + "...");
+        Plugin plugin = getPlugin(pluginName);
         if (plugin != null) {
             plugin.shutdown();
         }
@@ -105,6 +105,10 @@ public class PluginManager {
         return result;
     }
 
+    public boolean isRunning(String pluginName) {
+        return getPluginList().contains(pluginName);
+    }
+
     public Set getPluginList() {
         return plugins.keySet();
     }
@@ -120,6 +124,10 @@ public class PluginManager {
         }
 
         return pluginNames;
+    }
+
+    public Plugin getPlugin(String pluginName) {
+        return plugins.get(pluginName);
     }
 
 }

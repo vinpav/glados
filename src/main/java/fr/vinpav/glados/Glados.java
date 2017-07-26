@@ -35,9 +35,9 @@ public class Glados {
 
     public void initializeInterpreter() throws GladosException {
         try {
-            interpreter = (Interpreter)Class.forName(mainConfig.getProperty("glados.interpreter")).newInstance();
+            interpreter = (Interpreter)Class.forName(mainConfig.getProperty("glados.command.interpreter")).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            throw new GladosException("Cannot initialize interpreter " + mainConfig.getProperty("glados.interpreter"));
+            throw new GladosException("Cannot initialize interpreter " + mainConfig.getProperty("glados.command.interpreter"));
         }
     }
 
@@ -50,7 +50,7 @@ public class Glados {
         myGlados.start();
         logger.info("[Glados] > Initialization sequence complete.");
         logger.info("[Glados] > Type 'help;' if you're lost.");
-        logger.info("[Glados] > May I help you ?");
+        logger.info("[Glados] > So, tell me about your problems...");
         myGlados.getInterpreter().listen();
     }
 }
