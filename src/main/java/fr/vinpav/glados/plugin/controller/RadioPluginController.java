@@ -105,7 +105,7 @@ public class RadioPluginController extends PluginController {
         return info.toString();
     }
 
-    private String getCommandList() {
+    public String getCommandList() {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("[Glados] > Here's the " + describe() + " command list\n");

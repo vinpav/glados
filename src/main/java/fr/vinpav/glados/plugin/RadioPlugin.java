@@ -18,6 +18,7 @@ public class RadioPlugin extends Plugin {
     int currentChannel = 0;
 
     public RadioPlugin() {
+        setName("radio_plugin");
     }
 
     @Override

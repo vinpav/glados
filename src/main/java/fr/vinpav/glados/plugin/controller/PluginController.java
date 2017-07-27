@@ -25,4 +25,6 @@ public abstract class PluginController implements CommandController {
     public void setConfiguration(Configuration config) {
         this.config = config;
     }
+
+    public abstract String getCommandList();
 }
