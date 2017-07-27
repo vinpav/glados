@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalTime;
 import java.util.List;
 
-/* This clock displays the local time every 'plugin.clock.tick' */
+/* This clock displays the local time every 'controller.clock.tick' */
 public class ClockPlugin extends Plugin {
     protected static final Logger logger = LoggerFactory.getLogger(ClockPlugin.class);
 
@@ -17,7 +17,7 @@ public class ClockPlugin extends Plugin {
 
     @Override
     public void startup() {
-        tick = Integer.parseInt(getConfiguration().getProperty("plugin.clock.tick"));
+        tick = Integer.parseInt(getConfiguration().getProperty("controller.clock.tick"));
         super.startup();
     }
 
@@ -43,7 +43,7 @@ public class ClockPlugin extends Plugin {
         }
     }
 
-    @Override
+    //@Override
     public void execute(List<String> command) {
         switch (command.get(0)) {
             case "help": {

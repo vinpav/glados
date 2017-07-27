@@ -5,7 +5,6 @@ import fr.vinpav.glados.plugin.PluginManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,16 +36,14 @@ public class GladosCommandController {
 
         stringBuilder.append("[Glados] > You required the command list ? Well...\n");
         stringBuilder.append("----------------------------------------------------\n");
-        stringBuilder.append("available;             : list available plugins.\n");
         stringBuilder.append("exit;                  : Shutdown. (You shouldn't do that.)\n");
         stringBuilder.append("help;                  : I know you know this one...\n");
-        stringBuilder.append("running;               : list running plugins.\n");
-        stringBuilder.append("start [plugin name];   : start a plugin (ex : '/start clock_plugin').\n");
+        stringBuilder.append("pluginlist;            : list plugins.\n");
         stringBuilder.append("startall;              : start all plugins.\n");
-        stringBuilder.append("stop [plugin name];    : stop a plugin (ex : '/stop clock_plugin').\n");
         stringBuilder.append("stopall;               : stop all plugins.\n");
         stringBuilder.append("----------------------------------------------------\n");
-        stringBuilder.append("Type '[plugin name] help;' to see a plugin specific commands.\n");
+        stringBuilder.append("Type '[controller name] start/stop;' to start/stop a controller.\n");
+        stringBuilder.append("Type '[controller name] help;' to see a controller specific commands.\n");
 
         return stringBuilder.toString();
     }
@@ -61,16 +58,8 @@ public class GladosCommandController {
                 logger.info(getCommandList());
                 break;
             }
-            case "available": {
-                try {
-                    logger.info("[Glados] > Here's the available plugins list :\n" + PluginManager.getInstance().getPluginNames());
-                } catch (GladosException e) {
-                    logger.error("Couldn't load plugin names list", e);
-                }
-                break;
-            }
-            case "running": {
-                logger.info("[Glados] > Here's the running plugins list :\n" + PluginManager.getInstance().getPluginList());
+            case "pluginlist": {
+                logger.info("[Glados] > Here's the available plugins list :\n" + PluginManager.getInstance().getPluginList());
                 break;
             }
             case "exit": {
@@ -94,40 +83,26 @@ public class GladosCommandController {
     }
 
     /**
-     * Two arguments : used for plugin interaction and startup/shutdown
-     * @param order start / stop or the plugin name
-     * @param object the plugin name or a plugin command
+     * Two arguments : used for controller interaction and startup/shutdown
+     * @param order start / stop or the controller name
+     * @param object the controller name or a controller command
      */
     private void execute(String order, String object){
-        switch (order) {
-            case "start": {
-                PluginManager.getInstance().startPlugin(object);
-                break;
-            }
-            case "stop": {
-                PluginManager.getInstance().stopPlugin(object);
-                break;
-            }
-            default: {
-                execute(order, object, null);
-            }
-        }
+        execute(order, object, null);
     }
 
     /**
-     * Three arguments : plugin commands only
-     * @param order the plugin name
-     * @param object the plugin command to execute
+     * Three arguments : controller commands only
+     * @param order the controller name
+     * @param object the controller command to execute
      * @param option the command option, if applicable
      */
     private void execute(String order, String object, String option){
         try {
             if (!PluginManager.getInstance().getPluginNames().contains(order)) {
                 logger.info("[Glados] > I've never heard about what you call '" + order + "'...");
-            } else if (!PluginManager.getInstance().isRunning(order)) {
-                logger.info("[Glados] > " + order + " is not running at the moment.");
             } else {
-                PluginManager.getInstance().getPlugin(order).execute(Arrays.asList(object,option));
+                PluginManager.getInstance().getController(order).execute(Arrays.asList(object,option));
             }
         } catch (GladosException e) {
             logger.error("[Glados] > Shit happens.", e);

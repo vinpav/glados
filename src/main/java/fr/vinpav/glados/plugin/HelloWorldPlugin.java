@@ -35,8 +35,8 @@ public class HelloWorldPlugin extends Plugin {
 
     }
 
-    @Override
+    //@Override
     public void execute(List<String> command) {
-        // This plugin has no commands
+        // This controller has no commands
     }
 }

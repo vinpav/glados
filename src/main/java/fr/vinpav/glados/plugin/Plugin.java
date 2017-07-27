@@ -5,17 +5,16 @@ import fr.vinpav.glados.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class Plugin extends Thread implements CommandController {
+public abstract class Plugin extends Thread {
     protected static final Logger logger = LoggerFactory.getLogger(Plugin.class);
 
     private Configuration config;
 
     public String describe() {
-        return config.getProperty("plugin.description");
+        return config.getProperty("controller.description");
     }
 
     public void startup() {
-        logger.info("Starting " + describe());
         start();
     }
 

@@ -1,10 +1,13 @@
 package fr.vinpav.glados.plugin;
 
+import fr.vinpav.glados.command.controller.CommandController;
 import fr.vinpav.glados.config.Configuration;
 import fr.vinpav.glados.exception.GladosException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class PluginManager {
@@ -13,96 +16,62 @@ public class PluginManager {
     private static PluginManager ourInstance = new PluginManager();
 
     private Configuration config;
-    public Map<String,Plugin> plugins;
+    public Map<String,CommandController> controllers;
 
     public static PluginManager getInstance() {
         return ourInstance;
     }
 
     private PluginManager() {
-
     }
 
     public void initialize(Configuration config) throws GladosException {
         this.config = config;
-        plugins = new HashMap();
+        controllers = new HashMap<String, CommandController>();
+        for (String pluginName : getPluginNames()) {
+            try {
+                register(pluginName);
+            } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+                logger.error("[Glados] > Plugins initialization sequence failed.", e);
+            }
+        }
     }
 
     public void startAll() {
         try {
             for (String pluginName : getPluginNames()) {
-                startPlugin(pluginName);
+                controllers.get(pluginName).execute(Arrays.asList("start"));
             }
         } catch (GladosException e) {
-            logger.error("[Glados] > Plugins startup failed " + e.getMessage());
-        }
-    }
-
-    public void startPlugin(String pluginName) {
-        try {
-            register(pluginName);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.warn("[Glados] > Unable to register plugin " + pluginName);
-            e.printStackTrace();
+            logger.error("[Glados] > Plugins startup failed ", e);
         }
     }
 
     public void shutdownAll() {
         try {
             for (String pluginName : getPluginNames()) {
-                stopPlugin(pluginName);
+                if (controllers.get(pluginName) != null) {
+                    controllers.get(pluginName).execute(Arrays.asList("stop"));
+                }
             }
         } catch (GladosException e) {
             logger.error("[Glados] > Plugins shutdown failed " + e.getMessage());
         }
     }
 
-    public void stopPlugin(String pluginName) {
-        try {
-            unregister(pluginName);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.warn("[Glados] > Unable to unregister plugin " + pluginName);
-            e.printStackTrace();
-        }
-    }
-
-    private void register(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.info("[Glados] > Registering plugin : " + pluginName + "...");
+    private void register(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        logger.info("[Glados] > Registering controller : " + pluginName + "...");
         Configuration pluginConfig = new Configuration(pluginName + ".config");
         try {
             pluginConfig.load();
-            Class pluginClass = Class.forName(pluginConfig.getProperty("plugin.class.name"));
-            Plugin pluginInstance = (Plugin) pluginClass.newInstance();
-            pluginInstance.setConfiguration(pluginConfig);
-            pluginInstance.startup();
-            plugins.put(pluginName, pluginInstance);
-            logger.info(pluginInstance.describe() + " is online.");
+            Class controllerClass = Class.forName(pluginConfig.getProperty("controller.class.name"));
+            Constructor constructor = controllerClass.getConstructor(Configuration.class);
+            CommandController pluginController = (CommandController)constructor.newInstance(pluginConfig);
+            controllers.put(pluginName, pluginController);
+            logger.info(pluginName + " is ready.");
         } catch (GladosException e) {
-            logger.warn("[Glados] > Warning, plugin " + pluginName + " not loaded : " + e.getMessage());
+            logger.warn("[Glados] > Warning, controller " + pluginName + " not loaded : " + e.getMessage());
         }
-    }
-
-    private void unregister(String pluginName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.info("[Glados] > Unregistering plugin : " + pluginName + "...");
-        Plugin plugin = getPlugin(pluginName);
-        if (plugin != null) {
-            plugin.shutdown();
-        }
-        plugins.remove(pluginName);
-        logger.info(pluginName + " removed.");
-    }
-
-    public StringBuilder getRegisteredPlugins() {
-        StringBuilder result = new StringBuilder();
-        Iterator iterate = getPluginList().iterator();
-
-        int i = 0;
-        while (iterate.hasNext()) {
-            result.append("[Glados] > " + i + " : " + iterate.next() + "\n");
-            i++;
-        }
-
-        return result;
     }
 
     public boolean isRunning(String pluginName) {
@@ -110,7 +79,7 @@ public class PluginManager {
     }
 
     public Set getPluginList() {
-        return plugins.keySet();
+        return controllers.keySet();
     }
 
     public List<String> getPluginNames() throws GladosException {
@@ -126,8 +95,7 @@ public class PluginManager {
         return pluginNames;
     }
 
-    public Plugin getPlugin(String pluginName) {
-        return plugins.get(pluginName);
+    public CommandController getController(String pluginName) {
+        return controllers.get(pluginName);
     }
-
 }
