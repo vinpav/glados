@@ -29,7 +29,9 @@ public class ClockPluginController extends PluginController {
     @Override
     public void stopPlugin() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         logger.info(describe() + " is shutting down...");
-        plugin.shutdown();
+        if (plugin != null) {
+            plugin.shutdown();
+        }
         logger.info(describe() + " stopped.");
     }
 
